@@ -1,0 +1,68 @@
+﻿@model IEnumerable<JogosDeGuerraModel.Batalha>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ExercitoBranco.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ExercitoPreto.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Tabuleiro.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Turno.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Vencedor.Id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Estado)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExercitoBranco.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExercitoPreto.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Tabuleiro.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Turno.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Vencedor.Id)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Estado)
+        </td>
+        <td>
+            @if (item.Estado == JogosDeGuerraModel.Batalha.EstadoBatalhaEnum.NaoIniciado)
+            {
+                @Html.ActionLink("Iniciar Batalha", "Iniciar", new { id = item.Id }, null)
+                @Html.Label(" |")
+            }
+            @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+        </td>
+    </tr>
+}
+
+</table>
