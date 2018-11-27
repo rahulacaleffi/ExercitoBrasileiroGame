@@ -1,41 +1,77 @@
 ﻿
 @{
     ViewBag.Title = "Login";
+    Layout = null;
 }
 
-<link href="assets/custom/css/business-plate.css" rel="stylesheet">
-<div class="container centered">
-    <div class="row">
-        <div class="col-sm-6 col-sm-offset-3 mx-auto">
-            <div class="card card-signin my-5">
-                <div class="card-body">
-                    <h5 class="card-title text-center">Sign In</h5>
-                    <form>
-                        <div style="background-color: red;">
-                            @ViewBag.Message
-                        </div>
-                        <div class="form-label-group">
-                            <input type="email" id="loginEmail" class="form-control" placeholder="Email address" required autofocus>
-                            <label for="loginEmail" style="text-align:left">Email address</label>
+<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
+    <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30">
+        <form class="login100-form validate-form">
+            <span class="login100-form-title p-b-37">
+                Entrar
+            </span>
 
-                        </div>
-                        <div class="form-label-group">
-                            <input type="password" id="loginPassword" class="form-control" placeholder="Password" required>
-                            <label for="loginPassword" style="text-align:left">Password</label>
-                        </div>                       
-                        <div>
-                            <button onclick="login()" id="buttonLogin" class="btn btn-lg btn-primary btn-block text-uppercase" type="submit">Sign in</button>
-                            <button onclick="logout()" class="btn btn-default">Log Out</button>
-                        </div>
-                    </form>
-                    
-                </div>
+            <div class="wrap-input100 validate-input m-b-20" data-validate="Enter username or email">
+                <input class="input100" type="text" id="loginEmail" name="loginEmail" placeholder="E-mail">
+                <span class="focus-input100"></span>
             </div>
-        </div>
+
+            <div class="wrap-input100 validate-input m-b-25" data-validate="Enter password">
+                <input class="input100" type="password" id="loginPassword" name="loginPassword" placeholder="Senha">
+                <span class="focus-input100"></span>
+            </div>
+
+            <div class="container-login100-form-btn">
+                <button class="login100-form-btn" type="button" onclick="login()">
+                    Entrar
+                </button>
+            </div>
+
+            <div class="text-center p-t-57 p-b-20">
+                <span class="txt1">
+                    Ou entrar com
+                </span>
+            </div>
+
+            <div class="flex-c p-b-112">
+                <a href="#" class="login100-social-item">
+                    <i class="fa fa-facebook-f"></i>
+                </a>
+
+                <a href="#" class="login100-social-item">
+                    <img src="~/Content/images/icons/icon-google.png" alt="GOOGLE">
+                </a>
+            </div>
+
+            <div class="text-center">
+                <a href="#" class="txt2 hov1">
+                    Registrar
+                </a>
+            </div>
+        </form>
+
+
     </div>
 </div>
+
+
+
+<div id="dropDownSelect1"></div>
+
+
+
 @Styles.Render("~/Content/Login.css")
-@section MeusScripts{
+@Styles.Render("~/Content/vendor/bootstrap/css/bootstrap.min.css")
+@Styles.Render("~/Content/fonts/font-awesome-4.7.0/css/font-awesome.min.css")
+@Styles.Render("~/Content/fonts/iconic/css/material-design-iconic-font.min.css")
+@Styles.Render("~/Content/vendor/animate/animate.css")
+@Styles.Render("~/Content/vendor/css-hamburgers/hamburgers.min.css")
+@Styles.Render("~/Content/vendor/animsition/css/animsition.min.css")
+@Styles.Render("~/Content/vendor/select2/select2.min.css")
+@Styles.Render("~/Content/vendor/daterangepicker/daterangepicker.css")
+@Styles.Render("~/Content/css/util.css")
+@Styles.Render("~/Content/css/main.css")
+@Scripts.Render("~/bundles/jquery")  
 
 <script type="text/javascript">
     $("#loginPassword").keyup(function (event) {
@@ -89,11 +125,11 @@
             url: baseUrl +'/Token',
             data: loginData
         }).done(function (data) {
-            alert("Ola! Certo");
+            window.location.href = baseUrl + '/BatalhasMVC/Index';
             // Cache the access token in session storage.
             sessionStorage.setItem('accessToken', data.token_type + " " + data.access_token);
             sessionStorage.setItem('emailUsuario', data.userName);
         }).fail(showError);
     }
 </script>
-}
+

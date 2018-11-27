@@ -4,6 +4,10 @@
  * 
  * **/
 
+var CriarNovaBatalha;
+var MontarTabuleiro;
+var ObterBatalha;
+var IniciarBatalha;
 $(function () {
     var baseUrl = window.location.protocol + "//" +
         window.location.hostname +
@@ -15,28 +19,74 @@ $(function () {
     var pecaSelecionadaObj = null;
     var pecaElem = null;
     var elementos = null;
+    var token = sessionStorage.getItem("accessToken");
     //1 CriarNovaBatalha, 2 RetomarBatalha
     var urlIniciarBatalha = baseUrl + "/api/Batalhas/Iniciar?Id=2";
 
-    var token = sessionStorage.getItem("accessToken");
-    var headers = {};
-    if (token) {
-        headers.Authorization = token;
-    }
-    $.ajax({
-        type: 'GET',
-        url: urlIniciarBatalha,
-        headers: headers
-    }
-    ).done(function (data) {
-        MontarTabuleiro(data);
+    function AutorizarBatalha() {
+        var token = sessionStorage.getItem("accessToken");
+        var headers = {};
+        if (token) {
+            headers.Authorization = token;
         }
-    ).fail(
-        function (jqXHR, textStatus) {
-            alert("Código de Erro: " + jqXHR.status + "\n\n" + jqXHR.responseText);
-     });
+        $.ajax({
+            type: 'GET',
+            url: urlIniciarBatalha,
+            headers: headers
+        }
+        ).done(function (data) {
+            if (!VerificarSeJogadorEstaNaBatalha(data)) {
+                if (BatalhaTemDoisJogadores(data)) {
+                    VisualizarBatalha(data);
+                } else {
+                    PerguntarUsuario(data);
+                }
+            } else {
+                if (BatalhaTemDoisJogadores(data)) {
+                    Jogar(data);
+                } else {
+                    AvisarJogador();
+                }
+            }
+            MontarTabuleiro(data);
+        }
+        ).fail(
+            function (jqXHR, textStatus) {
+                alert("Código de Erro: " + jqXHR.status + "\n\n" + jqXHR.responseText);
+            });
+    }
 
-    function MontarTabuleiro(batalhaParam) {
+    function VerificarBatalha(Batalha) {
+        if (Batalha.Estado == 0) {
+            if (Batalha.ExercitoPretoId == null || Batalha.ExercitoBrancoId == null) {
+                if((Batalha.ExercitoPreto !=null && Batalha.ExercitoPreto.Usuario.Email == sessionStorage.getItem("EmailUsuario")) || (Batalha.ExercitoBranco != null && Batalha.ExercitoBranco.usuario.Email == sessionStorage("EmailUsuario"))
+                    ) {
+                    alert("Espere. Ainda não existe jogador disponível");
+
+                } else {
+                    IniciarBatalha(Batalha.Id);
+                }
+
+            }
+            else {
+                IniciarBatalha(Batalha.Id);
+            }
+        }
+        else {
+            MontarTabuleiro(Batalha);
+            if (Batalha.Estado == 10 || Batalha.Estado == 99) {
+
+            }
+        }
+    }
+
+    function BatalhaTemDoisJogadores(batalha) {
+        if (batalha.ExercitoBranco != null && batalha.ExercitoBranco != null) {
+            return true;
+        }
+    }
+
+    MontarTabuleiro = function(batalhaParam) {
         pecasNoTabuleiro = [];
         batalha = batalhaParam;
         var pecas = batalha.Tabuleiro.ElementosDoExercito
@@ -52,7 +102,7 @@ $(function () {
                 $("#linha_" + i.toString()).append("<div id='" + nome_casa + "' class='casa " + classe + "' />");
    
                 for (x = 0; x < pecas.length; x++) {
-                    if (pecas[x].posicao.Largura == i && pecas[x].posicao.Altura == j){
+                    if (pecas[x].posicao.Altura == i && pecas[x].posicao.Largura == j){
                         pecasNoTabuleiro[i][j] = pecas[x];                    
                         if (pecas[x].ExercitoId==ExercitoBrancoId) {
                             $("#" + nome_casa).append("<img src='https://www.w3schools.com/images/compatible_firefox.gif' class='peca' id='" + nome_casa.replace("casa", "peca_preta") + "'/>");
@@ -156,5 +206,68 @@ $(function () {
         }
     }   
 
-    
+    function VerificarSeJogadorEstaNaBatalha(batalha) {
+        if (batalha.ExercitoBranco != null && batalha.ExercitoBranco.Usuario != null && batalha.ExercitoBranco.Usuario.Email
+            == sessionStorage.getItem("EmailUsuario")) {
+            return true;
+        }
+        if(batalha.ExercitoPreto != null && batalha.ExercitoPreto.Usuario != null && batalha.ExercitoPreto.Usuario.Email 
+            == sessionStorage.getItem("EmailUsuario")){
+            return true;
+        }
+    }
+
+    IniciarBatalha = function (BatalhaID) {
+        var urlIniciarBatalha = baseUrl + "/api/Batalhas/Iniciar?Id=" + BatalhaID;
+        var headers = {};
+        if (token) {
+            headers.Authorization = token;
+        }
+        $.ajax({
+            type: 'GET',
+            url: urlIniciarBatalha,
+            headers: headers
+        }).done(function (data) {
+            VerificarBatalha(data);
+        }).fail(function (jqXHR, textStatus) {
+            alert("Código de Erro " + jqXHR.status + "\n\n" + jqXHR.responseText);
+        });
+    }
+
+     ObterBatalha = function (BatalhaId) {
+         var urlObterBatalha = baseUrl + "/api/Batalhas/" + BatalhaId;
+         var headers = {};
+         if (token) {
+             headers.Authorization = token;
+         }
+         $.ajax({
+             type: 'GET',
+             url: urlObterBatalha,
+             headers: headers
+         }
+         ).done(function (data) {
+             VerificarBatalha
+         }).fail(function (jqXHR, textStatus) {
+             alert("Código de erro: " + jqXHR.status + "\n\n" + jqXHR.responseText);
+         });
+    }
+
+    CriarNovaBatalha = function (NacaoID) {
+        var urlCriarNovaBatalha = baseUrl + "/api/Batalhas/CriarNovaBatalha?Nacao=" + NacaoID;
+        var headers = {};
+        if (token) {
+            headers.Authorization = token;
+        }
+        $.ajax({
+            type: 'GET',
+            url: urlCriarNovaBatalha,
+            headers: headers
+        }
+        ).done(function (data){
+            VerificarBatalha(data)
+        }).fail(function (jqXHR, textStatus){
+            alert("Código de erro: "+jqXHR.status + "\n\n" + jqXHR.responseText);
+        });
+
+    }
 });

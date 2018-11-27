@@ -36,6 +36,14 @@ namespace JogosDeGuerraWebAPI.Controllers
             return View(batalha);
         }
 
+        [Route("Tabuleiro/{id}")]
+        public ActionResult Tabuleiro(int? id)
+        {
+            ViewBag.BatalhaId = id;
+            var batalha = db.Batalhas.Find(id);
+            return View(batalha);
+        }
+
         // GET: BatalhasMVC/Create
         public ActionResult Create()
         {

@@ -38,6 +38,40 @@ namespace JogosDeGuerraWebAPI.Controllers
         {           
             return ctx.Batalhas.Find(id);
         }
+        public Boolean VerificaDoisJogadores(int batalhaId)
+        {
+            var batalha = ctx.Batalhas.Find(batalhaId);
+            if (batalha.ExercitoBranco!=null && batalha.ExercitoPreto != null)
+            {
+                return true;
+            }else
+            {
+                return false;
+            }
+        }
+
+        public Boolean JogPartBatalha(int batalhaId)
+        {
+            var usuario = Utils.Utils.ObterUsuarioLogado(ctx);
+            var batalha = ctx.Batalhas.Find(batalhaId);
+            if(VerificaDoisJogadores(batalhaId) == true)
+            {
+                if (batalha.ExercitoBranco.UsuarioId == usuario.Id || batalha.ExercitoPreto.UsuarioId == usuario.Id)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }else
+            {
+                return false;
+            }
+            
+        }
+
+        
 
         [Route("Iniciar")]
         [HttpGet]
@@ -132,6 +166,9 @@ namespace JogosDeGuerraWebAPI.Controllers
                         };
                         throw new HttpResponseException(resp);
                     }
+                    batalha.Turno = null;
+                    batalha.TurnoId = batalha.TurnoId == batalha.ExercitoBrancoId ? batalha.ExercitoPretoId : batalha.ExercitoBrancoId;
+                    ctx.SaveChanges();
                     return batalha;
                 }
                 else

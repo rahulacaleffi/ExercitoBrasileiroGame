@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace JogosDeGuerraModel
 {
+    [DataContract(IsReference=true)]
     public class Exercito
     {
         public override bool Equals(object obj)
@@ -27,13 +29,15 @@ namespace JogosDeGuerraModel
         public ICollection<ElementoDoExercito> Elementos { get; set; } =
             new HashSet<ElementoDoExercito>();
 
+        [DataMember]
         public int? BatalhaId { get; set; }
 
         [ForeignKey("BatalhaId")]
         public Batalha Batalha { get; set; }
-
+        
         public int UsuarioId { get; set; }
         [ForeignKey("UsuarioId")]
+        [DataMember]
         public Usuario Usuario { get; set; }
 
         public AbstractFactoryExercito.Nacao Nacao { get; set; }
