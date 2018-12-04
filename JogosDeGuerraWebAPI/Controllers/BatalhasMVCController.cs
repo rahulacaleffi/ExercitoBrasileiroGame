@@ -17,7 +17,14 @@ namespace JogosDeGuerraWebAPI.Controllers
         // GET: BatalhasMVC
         public ActionResult Index()
         {
-            var batalhas = db.Batalhas.Include(b => b.ExercitoBranco).Include(b => b.ExercitoPreto).Include(b => b.Tabuleiro).Include(b => b.Turno).Include(b => b.Vencedor);
+            var batalhas = db.Batalhas
+                .Include(b => b.ExercitoBranco)
+                .Include(b => b.ExercitoPreto)
+                .Include(b => b.ExercitoBranco.Usuario)
+                .Include(b => b.ExercitoPreto.Usuario)
+                .Include(b => b.Tabuleiro)
+                .Include(b => b.Turno)
+                .Include(b => b.Vencedor);
             return View(batalhas.ToList());
         }
 
@@ -36,28 +43,20 @@ namespace JogosDeGuerraWebAPI.Controllers
             return View(batalha);
         }
 
-        [Route("Tabuleiro/{id}")]
-        public ActionResult Tabuleiro(int? id)
-        {
-            ViewBag.BatalhaId = id;
-            var batalha = db.Batalhas.Find(id);
-            return View(batalha);
-        }
-
         // GET: BatalhasMVC/Create
         public ActionResult Create()
         {
             ViewBag.ExercitoBrancoId = new SelectList(db.Exercitos, "Id", "Id");
             ViewBag.ExercitoPretoId = new SelectList(db.Exercitos, "Id", "Id");
-            ViewBag.TabuleiroId = new SelectList(db.Tabuleiros, "Id", "Id");
+            ViewBag.TabuleiroId = new SelectList(db.Tabuleiroes, "Id", "Id");
             ViewBag.TurnoId = new SelectList(db.Exercitos, "Id", "Id");
             ViewBag.VencedorId = new SelectList(db.Exercitos, "Id", "Id");
             return View();
         }
 
         // POST: BatalhasMVC/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
+        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,TabuleiroId,ExercitoBrancoId,ExercitoPretoId,VencedorId,TurnoId,Estado")] Batalha batalha)
@@ -71,7 +70,7 @@ namespace JogosDeGuerraWebAPI.Controllers
 
             ViewBag.ExercitoBrancoId = new SelectList(db.Exercitos, "Id", "Id", batalha.ExercitoBrancoId);
             ViewBag.ExercitoPretoId = new SelectList(db.Exercitos, "Id", "Id", batalha.ExercitoPretoId);
-            ViewBag.TabuleiroId = new SelectList(db.Tabuleiros, "Id", "Id", batalha.TabuleiroId);
+            ViewBag.TabuleiroId = new SelectList(db.Tabuleiroes, "Id", "Id", batalha.TabuleiroId);
             ViewBag.TurnoId = new SelectList(db.Exercitos, "Id", "Id", batalha.TurnoId);
             ViewBag.VencedorId = new SelectList(db.Exercitos, "Id", "Id", batalha.VencedorId);
             return View(batalha);
@@ -91,15 +90,15 @@ namespace JogosDeGuerraWebAPI.Controllers
             }
             ViewBag.ExercitoBrancoId = new SelectList(db.Exercitos, "Id", "Id", batalha.ExercitoBrancoId);
             ViewBag.ExercitoPretoId = new SelectList(db.Exercitos, "Id", "Id", batalha.ExercitoPretoId);
-            ViewBag.TabuleiroId = new SelectList(db.Tabuleiros, "Id", "Id", batalha.TabuleiroId);
+            ViewBag.TabuleiroId = new SelectList(db.Tabuleiroes, "Id", "Id", batalha.TabuleiroId);
             ViewBag.TurnoId = new SelectList(db.Exercitos, "Id", "Id", batalha.TurnoId);
             ViewBag.VencedorId = new SelectList(db.Exercitos, "Id", "Id", batalha.VencedorId);
             return View(batalha);
         }
 
         // POST: BatalhasMVC/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
+        // Para se proteger de mais ataques, ative as propriedades específicas a que você quer se conectar. Para 
+        // obter mais detalhes, consulte https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,TabuleiroId,ExercitoBrancoId,ExercitoPretoId,VencedorId,TurnoId,Estado")] Batalha batalha)
@@ -112,9 +111,25 @@ namespace JogosDeGuerraWebAPI.Controllers
             }
             ViewBag.ExercitoBrancoId = new SelectList(db.Exercitos, "Id", "Id", batalha.ExercitoBrancoId);
             ViewBag.ExercitoPretoId = new SelectList(db.Exercitos, "Id", "Id", batalha.ExercitoPretoId);
-            ViewBag.TabuleiroId = new SelectList(db.Tabuleiros, "Id", "Id", batalha.TabuleiroId);
+            ViewBag.TabuleiroId = new SelectList(db.Tabuleiroes, "Id", "Id", batalha.TabuleiroId);
             ViewBag.TurnoId = new SelectList(db.Exercitos, "Id", "Id", batalha.TurnoId);
             ViewBag.VencedorId = new SelectList(db.Exercitos, "Id", "Id", batalha.VencedorId);
+            return View(batalha);
+        }
+
+        [Route("Tabuleiro/{id}")]
+        public ActionResult Tabuleiro(int? id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.NotFound);
+            }
+            Batalha batalha = db.Batalhas.Find(id);
+            if (batalha == null)
+            {
+                return HttpNotFound();
+            }
+            ViewBag.Id = batalha.Id;
             return View(batalha);
         }
 
@@ -143,6 +158,8 @@ namespace JogosDeGuerraWebAPI.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+
+
 
         protected override void Dispose(bool disposing)
         {

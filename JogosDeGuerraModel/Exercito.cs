@@ -22,24 +22,23 @@ namespace JogosDeGuerraModel
         {
             return this.Id.GetHashCode();
         }
-
+        [DataMember]
         public int Id { get; set; }
-
+        [DataMember]
         [InverseProperty("Exercito")]
         public ICollection<ElementoDoExercito> Elementos { get; set; } =
             new HashSet<ElementoDoExercito>();
-
         [DataMember]
         public int? BatalhaId { get; set; }
 
         [ForeignKey("BatalhaId")]
         public Batalha Batalha { get; set; }
-        
-        public int UsuarioId { get; set; }
-        [ForeignKey("UsuarioId")]
         [DataMember]
+        public int UsuarioId { get; set; }
+        [DataMember]
+        [ForeignKey("UsuarioId")]
         public Usuario Usuario { get; set; }
-
+        [DataMember]
         public AbstractFactoryExercito.Nacao Nacao { get; set; }
 
         public ICollection<ElementoDoExercito> ElementosVivos { get

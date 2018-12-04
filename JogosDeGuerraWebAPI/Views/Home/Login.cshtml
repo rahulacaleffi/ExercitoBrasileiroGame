@@ -3,7 +3,6 @@
     ViewBag.Title = "Login";
     Layout = null;
 }
-
 <div class="container-login100" style="background-image: url('images/bg-01.jpg');">
     <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30">
         <form class="login100-form validate-form">
@@ -59,7 +58,6 @@
 <div id="dropDownSelect1"></div>
 
 
-
 @Styles.Render("~/Content/Login.css")
 @Styles.Render("~/Content/vendor/bootstrap/css/bootstrap.min.css")
 @Styles.Render("~/Content/fonts/font-awesome-4.7.0/css/font-awesome.min.css")
@@ -71,8 +69,7 @@
 @Styles.Render("~/Content/vendor/daterangepicker/daterangepicker.css")
 @Styles.Render("~/Content/css/util.css")
 @Styles.Render("~/Content/css/main.css")
-@Scripts.Render("~/bundles/jquery")  
-
+@Scripts.Render("~/bundles/jquery")
 <script type="text/javascript">
     $("#loginPassword").keyup(function (event) {
         if (event.keyCode === 13) {
@@ -84,7 +81,7 @@
             $("#buttonLogin").click();
         }
     });
-    </script>
+</script>
 <script type="text/javascript">
     function showError(jqXHR) {
 
@@ -108,7 +105,7 @@
         }
     }
 
-    
+
     function login() {
         var baseUrl =
             window.location.protocol +
@@ -122,7 +119,7 @@
         };
         $.ajax({
             type: 'POST',
-            url: baseUrl +'/Token',
+            url: baseUrl + '/Token',
             data: loginData
         }).done(function (data) {
             window.location.href = baseUrl + '/BatalhasMVC/Index';
@@ -132,4 +129,3 @@
         }).fail(showError);
     }
 </script>
-

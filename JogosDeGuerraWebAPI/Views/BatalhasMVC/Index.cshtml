@@ -2,13 +2,12 @@
 
 @{
     ViewBag.Title = "Index";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Batalhas</h2>
+<h2>Index</h2>
 
 <p>
-    <button class="btn btn-success" onclick="CriarNovaBatalha(1)">Criar Nova Batalha</button>
+    <button  type="button" onclick="CriarNovaBatalha(1)">Entrar em novo Jogo</button>    
 </p>
 <table class="table">
     <tr>
@@ -33,43 +32,36 @@
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.ExercitoBranco.Id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ExercitoPreto.Id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Tabuleiro.Id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Turno.Id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Vencedor.Id)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Estado)
-        </td>
-        <td>
-            @if (item.Estado == JogosDeGuerraModel.Batalha.EstadoBatalhaEnum.NaoIniciado)
-            {
-                @Html.ActionLink("Iniciar Batalha", "Tabuleiro", new { id = item.Id }, null)
-                @Html.Label(" |")
-            }
-            <script>
-
-            </script>
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExercitoBranco.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ExercitoPreto.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tabuleiro.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Turno.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vencedor.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estado)
+            </td>
+            <td>
+                @Html.ActionLink("Iniciar Batalha", "Tabuleiro", "BatalhasMVC", new { Id = item.Id }, null) |
+                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
+            </td>
+        </tr>
+    }
+    @section MeusScripts{
+        <script src="~/Scripts/Tabuleiro.js"></script>
+    }
 
 </table>
-@section MeusScripts
-{
-    <script src="~/Scripts/Tabuleiro.js"></script>
-    }  
- 
-

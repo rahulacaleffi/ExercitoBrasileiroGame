@@ -3,11 +3,10 @@
  * https://www.devmedia.com.br/desenhando-um-tabuleiro-de-damas-em-html-css-js/24591
  * 
  * **/
-
-var CriarNovaBatalha;
-var MontarTabuleiro;
 var ObterBatalha;
 var IniciarBatalha;
+var CriarNovaBatalha;
+var MontarTabuleiro;
 $(function () {
     var baseUrl = window.location.protocol + "//" +
         window.location.hostname +
@@ -19,12 +18,52 @@ $(function () {
     var pecaSelecionadaObj = null;
     var pecaElem = null;
     var elementos = null;
-    var token = sessionStorage.getItem("accessToken");
-    //1 CriarNovaBatalha, 2 RetomarBatalha
-    var urlIniciarBatalha = baseUrl + "/api/Batalhas/Iniciar?Id=2";
 
-    function AutorizarBatalha() {
-        var token = sessionStorage.getItem("accessToken");
+    //1 CriarNovaBatalha, 2 RetomarBatalha    
+    var token = sessionStorage.getItem("accessToken");
+
+    ObterBatalha = function (BatalhaId) {
+        var urlObterBatalha = baseUrl + "/api/Batalhas/" + BatalhaId;
+        var headers = {};
+        if (token) {
+            headers.Authorization = token;
+        }
+        $.ajax({
+            type: 'GET',
+            url: urlObterBatalha,
+            headers: headers
+        })
+            .done(function (data) {
+                VerificarBatalha(data);
+            })
+            .fail(
+            function (jqXHR, textStatus) {
+                alert("Código de Erro: " + jqXHR.status + "\n\n" + jqXHR.responseText);
+            });
+    }
+
+    CriarNovaBatalha = function (NacaoID) {
+        var urlCriarNovaBatalha = baseUrl + "/api/Batalhas/CriarNovaBatalha?Nacao=" + NacaoID;
+        var headers = {};
+        if (token) {
+            headers.Authorization = token;
+        }
+        $.ajax({
+            type: 'GET',
+            url: urlCriarNovaBatalha,
+            headers: headers
+        }
+        ).done(function (data) {
+            window.location.reload();
+        }
+            ).fail(
+            function (jqXHR, textStatus) {
+                alert("Código de Erro: " + jqXHR.status + "\n\n" + jqXHR.responseText);
+            });
+    }
+
+    IniciarBatalha = function (BatalhaID) {
+        var urlIniciarBatalha = baseUrl + "/api/Batalhas/Iniciar?Id=" + BatalhaID;
         var headers = {};
         if (token) {
             headers.Authorization = token;
@@ -35,64 +74,22 @@ $(function () {
             headers: headers
         }
         ).done(function (data) {
-            if (!VerificarSeJogadorEstaNaBatalha(data)) {
-                if (BatalhaTemDoisJogadores(data)) {
-                    VisualizarBatalha(data);
-                } else {
-                    PerguntarUsuario(data);
-                }
-            } else {
-                if (BatalhaTemDoisJogadores(data)) {
-                    Jogar(data);
-                } else {
-                    AvisarJogador();
-                }
-            }
-            MontarTabuleiro(data);
+            VerificarBatalha(data);
         }
-        ).fail(
+            ).fail(
             function (jqXHR, textStatus) {
                 alert("Código de Erro: " + jqXHR.status + "\n\n" + jqXHR.responseText);
             });
     }
-
-    function VerificarBatalha(Batalha) {
-        if (Batalha.Estado == 0) {
-            if (Batalha.ExercitoPretoId == null || Batalha.ExercitoBrancoId == null) {
-                if((Batalha.ExercitoPreto !=null && Batalha.ExercitoPreto.Usuario.Email == sessionStorage.getItem("EmailUsuario")) || (Batalha.ExercitoBranco != null && Batalha.ExercitoBranco.usuario.Email == sessionStorage("EmailUsuario"))
-                    ) {
-                    alert("Espere. Ainda não existe jogador disponível");
-
-                } else {
-                    IniciarBatalha(Batalha.Id);
-                }
-
-            }
-            else {
-                IniciarBatalha(Batalha.Id);
-            }
-        }
-        else {
-            MontarTabuleiro(Batalha);
-            if (Batalha.Estado == 10 || Batalha.Estado == 99) {
-
-            }
-        }
-    }
-
-    function BatalhaTemDoisJogadores(batalha) {
-        if (batalha.ExercitoBranco != null && batalha.ExercitoBranco != null) {
-            return true;
-        }
-    }
-
+    
     MontarTabuleiro = function(batalhaParam) {
         pecasNoTabuleiro = [];
-        batalha = batalhaParam;
+        var batalha = batalhaParam;
         var pecas = batalha.Tabuleiro.ElementosDoExercito
         var ExercitoBrancoId = batalha.ExercitoBrancoId;
         var ExercitoPretoId = batalha.ExercitoPretoId;
         var i;
+        $("#tabuleiro").empty();
         for (i = 0; i < batalha.Tabuleiro.Altura; i++) {
             $("#tabuleiro").append("<div id='linha_" + i.toString() + "' class='linha' >");
             pecasNoTabuleiro[i] = [];
@@ -102,6 +99,9 @@ $(function () {
                 $("#linha_" + i.toString()).append("<div id='" + nome_casa + "' class='casa " + classe + "' />");
    
                 for (x = 0; x < pecas.length; x++) {
+                    if (pecas[x].Saude <= 0) {
+                        continue;
+                    }
                     if (pecas[x].posicao.Altura == i && pecas[x].posicao.Largura == j){
                         pecasNoTabuleiro[i][j] = pecas[x];                    
                         if (pecas[x].ExercitoId==ExercitoBrancoId) {
@@ -129,7 +129,7 @@ $(function () {
             var largura = casa_selecionada.split("_")[2]
             if (pecaElem == null) {
                 //Obter o id da imagem selecionada.
-                peca_selecionadaId = $("#" + casa_selecionada).children("img:first").attr("id");
+                peca_selecionadaId = ObterPecaIDNaCasa(casa_selecionada);
                 //Se for nulo
                 if (peca_selecionadaId == null) {
                     pecaElem = null;
@@ -146,30 +146,43 @@ $(function () {
                     Altura: altura,
                     Largura: largura
                 };
+                var ExercitoTurno = (batalha.TurnoId == batalha.ExercitoBrancoId) ? batalha.ExercitoBranco : batalha.ExercitoPreto;
+
+                if(ObterPecaIDNaCasa(casa_selecionada) == null) {
+                    ataque = false;
+                } else {
+                    ataque = true;
+                }
+
                 var movimento = {
                     Posicao: posicaopeca,
-                    AutorId: batalha.Turno.UsuarioId,
+                    AutorId: ExercitoTurno.UsuarioId,
                     BatalhaId: batalha.Id,
-                    ElementoId: pecaSelecionadaObj.Id
+                    ElementoId: pecaSelecionadaObj.Id,
+                    TipoMovimento: ataque ? "Atacar" :"Mover"
                 };
                 var EmailUsuario = sessionStorage.getItem("emailUsuario");
 
 
-                if( batalha.Turno.Usuario.Email == EmailUsuario &&
-                    batalha.Turno.Id == pecaSelecionadaObj.ExercitoId
-                    ){
+                if (ExercitoTurno.Usuario.Email == EmailUsuario &&
+                    ExercitoTurno.Id == pecaSelecionadaObj.ExercitoId
+                ) {
                     Mover(movimento, pecaElem.parentNode, document.getElementById(casa_selecionada), pecaElem);
-                }else if(batalha.Turno.Usuario.Email != EmailUsuario){
+                } else if (ExercitoTurno.Usuario.Email != EmailUsuario){
                     alert("Não é a sua vez!");
-                }else if(batalha.Turno.Id != pecaSelecionadaObj.ExercitoId){
+                } else if (ExercitoTurno.Id != pecaSelecionadaObj.ExercitoId){
                     alert("Não é o seu exercito!");
                 }
             
 
                 pecaElem = null;
+                $("#" + casa_selecionada).removeClass("casa_selecionada");
             }
         });
 
+        function ObterPecaIDNaCasa(casa_selecionada) {
+            return $("#" + casa_selecionada).children("img:first").attr("id");
+        }
 
         function Mover(movimento, posAntiga, posNova, peca) {
             var token = sessionStorage.getItem("accessToken");
@@ -184,8 +197,15 @@ $(function () {
                 data: movimento
             })
                 .done(
-                function () {
-                    MoverPeca(posAntiga, posNova, peca)
+                function (data) {
+                    MontarTabuleiro(data);
+                    /*
+                    if (movimento.TipoMovimento == "Mover") {
+                        MoverPeca(posAntiga, posNova, peca)
+                    } else {
+                        window.reload();
+                    }
+                    */
                 }
                 )
                 .fail(
@@ -198,76 +218,36 @@ $(function () {
         function MoverPeca(posAntiga, posNova, peca) {
 //            var casaElem = document.getElementById(casa_selecionada);
             //Remover a peça da casa antiga.
-            posAntiga.removeChild(pecaElem);
+            posAntiga.removeChild(peca);
             //Colocar a peça na nova casa.
-            posNova.appendChild(pecaElem);
+            posNova.appendChild(peca);
             //pecaElem = null para não mover a peça no novo clique.
             posNova.classList.remove("casa_selecionada")
         }
     }   
 
-    function VerificarSeJogadorEstaNaBatalha(batalha) {
-        if (batalha.ExercitoBranco != null && batalha.ExercitoBranco.Usuario != null && batalha.ExercitoBranco.Usuario.Email
-            == sessionStorage.getItem("EmailUsuario")) {
-            return true;
-        }
-        if(batalha.ExercitoPreto != null && batalha.ExercitoPreto.Usuario != null && batalha.ExercitoPreto.Usuario.Email 
-            == sessionStorage.getItem("EmailUsuario")){
-            return true;
+    function VerificarBatalha(Batalha) {
+        if (Batalha.Estado == 0) {
+            if (Batalha.ExercitoPretoId == null || Batalha.ExercitoBrancoId == null) {
+                if ((Batalha.ExercitoPreto != null &&
+                    Batalha.ExercitoPreto.Usuario.Email ==
+                    sessionStorage.getItem("EmailUsuario")) ||
+                    (Batalha.ExercitoBranco != null &&
+                        Batalha.ExercitoBranco.Usuario.Email ==
+                        sessionStorage.getItem("EmailUsuario"))
+                ) {
+                    alert("Espere. Ainda não existe jogador disponível");
+                } else {
+                    IniciarBatalha(Batalha.Id);
+                }
+            } else {
+                IniciarBatalha(Batalha.Id);
+            }
+        } else {
+            MontarTabuleiro(Batalha);
+            if (Batalha.Estado == 10 || Batalha.Estado == 99) {
+            }
         }
     }
 
-    IniciarBatalha = function (BatalhaID) {
-        var urlIniciarBatalha = baseUrl + "/api/Batalhas/Iniciar?Id=" + BatalhaID;
-        var headers = {};
-        if (token) {
-            headers.Authorization = token;
-        }
-        $.ajax({
-            type: 'GET',
-            url: urlIniciarBatalha,
-            headers: headers
-        }).done(function (data) {
-            VerificarBatalha(data);
-        }).fail(function (jqXHR, textStatus) {
-            alert("Código de Erro " + jqXHR.status + "\n\n" + jqXHR.responseText);
-        });
-    }
-
-     ObterBatalha = function (BatalhaId) {
-         var urlObterBatalha = baseUrl + "/api/Batalhas/" + BatalhaId;
-         var headers = {};
-         if (token) {
-             headers.Authorization = token;
-         }
-         $.ajax({
-             type: 'GET',
-             url: urlObterBatalha,
-             headers: headers
-         }
-         ).done(function (data) {
-             VerificarBatalha
-         }).fail(function (jqXHR, textStatus) {
-             alert("Código de erro: " + jqXHR.status + "\n\n" + jqXHR.responseText);
-         });
-    }
-
-    CriarNovaBatalha = function (NacaoID) {
-        var urlCriarNovaBatalha = baseUrl + "/api/Batalhas/CriarNovaBatalha?Nacao=" + NacaoID;
-        var headers = {};
-        if (token) {
-            headers.Authorization = token;
-        }
-        $.ajax({
-            type: 'GET',
-            url: urlCriarNovaBatalha,
-            headers: headers
-        }
-        ).done(function (data){
-            VerificarBatalha(data)
-        }).fail(function (jqXHR, textStatus){
-            alert("Código de erro: "+jqXHR.status + "\n\n" + jqXHR.responseText);
-        });
-
-    }
 });
