@@ -3,129 +3,132 @@
     ViewBag.Title = "Login";
     Layout = null;
 }
-<div class="container-login100" style="background-image: url('images/bg-01.jpg');">
-    <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30">
-        <form class="login100-form validate-form">
-            <span class="login100-form-title p-b-37">
-                Entrar
-            </span>
-
-            <div class="wrap-input100 validate-input m-b-20" data-validate="Enter username or email">
-                <input class="input100" type="text" id="loginEmail" name="loginEmail" placeholder="E-mail">
-                <span class="focus-input100"></span>
-            </div>
-
-            <div class="wrap-input100 validate-input m-b-25" data-validate="Enter password">
-                <input class="input100" type="password" id="loginPassword" name="loginPassword" placeholder="Senha">
-                <span class="focus-input100"></span>
-            </div>
-
-            <div class="container-login100-form-btn">
-                <button class="login100-form-btn" type="button" onclick="login()">
+<body>
+    <div class="container-login100" style="background-color: rgba(243,202,150,0.2);">
+        <div class="wrap-login100 p-l-55 p-r-55 p-t-80 p-b-30">
+            <form class="login100-form validate-form">
+                <span class="login100-form-title p-b-37">
                     Entrar
-                </button>
-            </div>
-
-            <div class="text-center p-t-57 p-b-20">
-                <span class="txt1">
-                    Ou entrar com
                 </span>
-            </div>
 
-            <div class="flex-c p-b-112">
-                <a href="#" class="login100-social-item">
-                    <i class="fa fa-facebook-f"></i>
-                </a>
+                <div class="wrap-input100 validate-input m-b-20" data-validate="Enter username or email">
+                    <input class="input100" type="text" id="loginEmail" name="loginEmail" placeholder="E-mail">
+                    <span class="focus-input100"></span>
+                </div>
 
-                <a href="#" class="login100-social-item">
-                    <img src="~/Content/images/icons/icon-google.png" alt="GOOGLE">
-                </a>
-            </div>
+                <div class="wrap-input100 validate-input m-b-25" data-validate="Enter password">
+                    <input class="input100" type="password" id="loginPassword" name="loginPassword" placeholder="Senha">
+                    <span class="focus-input100"></span>
+                </div>
 
-            <div class="text-center">
-                <a href="#" class="txt2 hov1">
-                    Registrar
-                </a>
-            </div>
-        </form>
+                <div class="container-login100-form-btn">
+                    <button class="login100-form-btn" type="button" onclick="login()">
+                        Entrar
+                    </button>
+                </div>
+
+                <div class="text-center p-t-57 p-b-20">
+                    <span class="txt1">
+                        Ou entrar com
+                    </span>
+                </div>
+
+                <div class="flex-c p-b-112">
+                    <a href="#" class="login100-social-item">
+                        <i class="fa fa-facebook-f"></i>
+                    </a>
+
+                    <a href="#" class="login100-social-item">
+                        <img src="~/Content/images/icons/icon-google.png" alt="GOOGLE">
+                    </a>
+                </div>
+
+                <div class="text-center">
+                    <a href="#" class="txt2 hov1">
+                        Registrar
+                    </a>
+                </div>
+            </form>
 
 
+        </div>
     </div>
-</div>
 
 
 
-<div id="dropDownSelect1"></div>
+    <div id="dropDownSelect1"></div>
 
 
-@Styles.Render("~/Content/Login.css")
-@Styles.Render("~/Content/vendor/bootstrap/css/bootstrap.min.css")
-@Styles.Render("~/Content/fonts/font-awesome-4.7.0/css/font-awesome.min.css")
-@Styles.Render("~/Content/fonts/iconic/css/material-design-iconic-font.min.css")
-@Styles.Render("~/Content/vendor/animate/animate.css")
-@Styles.Render("~/Content/vendor/css-hamburgers/hamburgers.min.css")
-@Styles.Render("~/Content/vendor/animsition/css/animsition.min.css")
-@Styles.Render("~/Content/vendor/select2/select2.min.css")
-@Styles.Render("~/Content/vendor/daterangepicker/daterangepicker.css")
-@Styles.Render("~/Content/css/util.css")
-@Styles.Render("~/Content/css/main.css")
-@Scripts.Render("~/bundles/jquery")
-<script type="text/javascript">
-    $("#loginPassword").keyup(function (event) {
-        if (event.keyCode === 13) {
-            $("#buttonLogin").click();
-        }
-    });
-    $("#loginEmail").keyup(function (event) {
-        if (event.keyCode === 13) {
-            $("#buttonLogin").click();
-        }
-    });
-</script>
-<script type="text/javascript">
-    function showError(jqXHR) {
+    @Styles.Render("~/Content/Login.css")
+    @Styles.Render("~/Content/vendor/bootstrap/css/bootstrap.min.css")
+    @Styles.Render("~/Content/fonts/font-awesome-4.7.0/css/font-awesome.min.css")
+    @Styles.Render("~/Content/fonts/iconic/css/material-design-iconic-font.min.css")
+    @Styles.Render("~/Content/vendor/animate/animate.css")
+    @Styles.Render("~/Content/vendor/css-hamburgers/hamburgers.min.css")
+    @Styles.Render("~/Content/vendor/animsition/css/animsition.min.css")
+    @Styles.Render("~/Content/vendor/select2/select2.min.css")
+    @Styles.Render("~/Content/vendor/daterangepicker/daterangepicker.css")
+    @Styles.Render("~/Content/css/util.css")
+    @Styles.Render("~/Content/css/main.css")
+    @Scripts.Render("~/bundles/jquery")
+    <script type="text/javascript">
+        $("#loginPassword").keyup(function (event) {
+            if (event.keyCode === 13) {
+                $("#buttonLogin").click();
+            }
+        });
+        $("#loginEmail").keyup(function (event) {
+            if (event.keyCode === 13) {
+                $("#buttonLogin").click();
+            }
+        });
+    </script>
+    <script type="text/javascript">
+        function showError(jqXHR) {
 
-        alert("Olá Erro!");
-        var response = jqXHR.responseJSON;
-        if (response) {
-            if (response.Message) self.errors.push(response.Message);
-            if (response.ModelState) {
-                var modelState = response.ModelState;
-                for (var prop in modelState) {
-                    if (modelState.hasOwnProperty(prop)) {
-                        var msgArr = modelState[prop]; // expect array here
-                        if (msgArr.length) {
-                            for (var i = 0; i < msgArr.length; ++i) self.errors.push(msgArr[i]);
+            alert("Olá Erro!");
+            var response = jqXHR.responseJSON;
+            if (response) {
+                if (response.Message) self.errors.push(response.Message);
+                if (response.ModelState) {
+                    var modelState = response.ModelState;
+                    for (var prop in modelState) {
+                        if (modelState.hasOwnProperty(prop)) {
+                            var msgArr = modelState[prop]; // expect array here
+                            if (msgArr.length) {
+                                for (var i = 0; i < msgArr.length; ++i) self.errors.push(msgArr[i]);
+                            }
                         }
                     }
                 }
+                if (response.error) self.errors.push(response.error);
+                if (response.error_description) self.errors.push(response.error_description);
             }
-            if (response.error) self.errors.push(response.error);
-            if (response.error_description) self.errors.push(response.error_description);
         }
-    }
 
 
-    function login() {
-        var baseUrl =
-            window.location.protocol +
-            "//" +
-            window.location.hostname +
-            (window.location.port ? ':' + window.location.port : '');
-        var loginData = {
-            grant_type: 'password',
-            username: document.getElementById("loginEmail").value,
-            password: document.getElementById("loginPassword").value
-        };
-        $.ajax({
-            type: 'POST',
-            url: baseUrl + '/Token',
-            data: loginData
-        }).done(function (data) {
-            window.location.href = baseUrl + '/BatalhasMVC/Index';
-            // Cache the access token in session storage.
-            sessionStorage.setItem('accessToken', data.token_type + " " + data.access_token);
-            sessionStorage.setItem('emailUsuario', data.userName);
-        }).fail(showError);
-    }
-</script>
+        function login() {
+            var baseUrl =
+                window.location.protocol +
+                "//" +
+                window.location.hostname +
+                (window.location.port ? ':' + window.location.port : '');
+            var loginData = {
+                grant_type: 'password',
+                username: document.getElementById("loginEmail").value,
+                password: document.getElementById("loginPassword").value
+            };
+            $.ajax({
+                type: 'POST',
+                url: baseUrl + '/Token',
+                data: loginData
+            }).done(function (data) {
+                window.location.href = baseUrl + '/BatalhasMVC/Index';
+                // Cache the access token in session storage.
+                sessionStorage.setItem('accessToken', data.token_type + " " + data.access_token);
+                sessionStorage.setItem('emailUsuario', data.userName);
+            }).fail(showError);
+        }
+    </script>
+
+</body>

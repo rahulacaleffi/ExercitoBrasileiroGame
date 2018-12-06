@@ -1,0 +1,12 @@
+C:\Users\Rahula\Downloads\c\Jogos-de-Guerra-master\JogosDeGuerraModel\bin\Debug\JogosDeGuerraModel.dll.config
+C:\Users\Rahula\Downloads\c\Jogos-de-Guerra-master\JogosDeGuerraModel\bin\Debug\JogosDeGuerraModel.dll
+C:\Users\Rahula\Downloads\c\Jogos-de-Guerra-master\JogosDeGuerraModel\bin\Debug\JogosDeGuerraModel.pdb
+C:\Users\Rahula\Downloads\c\Jogos-de-Guerra-master\JogosDeGuerraModel\bin\Debug\EntityFramework.dll
+C:\Users\Rahula\Downloads\c\Jogos-de-Guerra-master\JogosDeGuerraModel\bin\Debug\EntityFramework.SqlServer.dll
+C:\Users\Rahula\Downloads\c\Jogos-de-Guerra-master\JogosDeGuerraModel\bin\Debug\EntityFramework.xml
+C:\Users\Rahula\Downloads\c\Jogos-de-Guerra-master\JogosDeGuerraModel\bin\Debug\EntityFramework.SqlServer.xml
+C:\Users\Rahula\Downloads\c\Jogos-de-Guerra-master\JogosDeGuerraModel\obj\Debug\JogosDeGuerraModel.csprojAssemblyReference.cache
+C:\Users\Rahula\Downloads\c\Jogos-de-Guerra-master\JogosDeGuerraModel\obj\Debug\JogosDeGuerraModel.csproj.CoreCompileInputs.cache
+C:\Users\Rahula\Downloads\c\Jogos-de-Guerra-master\JogosDeGuerraModel\obj\Debug\JogosDeGuerraModel.csproj.CopyComplete
+C:\Users\Rahula\Downloads\c\Jogos-de-Guerra-master\JogosDeGuerraModel\obj\Debug\JogosDeGuerraModel.dll
+C:\Users\Rahula\Downloads\c\Jogos-de-Guerra-master\JogosDeGuerraModel\obj\Debug\JogosDeGuerraModel.pdb

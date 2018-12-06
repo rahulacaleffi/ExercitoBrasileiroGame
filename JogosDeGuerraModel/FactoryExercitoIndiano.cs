@@ -15,7 +15,7 @@ namespace JogosDeGuerraModel
 
         public override Cavaleiro CriarCavalaria()
         {
-            return new CavaleiroIndiano();
+            return new CavaleiroIndiana();
         }
 
         public override Guerreiro CriarGuerreiro()

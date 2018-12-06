@@ -105,10 +105,10 @@ $(function () {
                     if (pecas[x].posicao.Altura == i && pecas[x].posicao.Largura == j){
                         pecasNoTabuleiro[i][j] = pecas[x];                    
                         if (pecas[x].ExercitoId==ExercitoBrancoId) {
-                            $("#" + nome_casa).append("<img src='https://www.w3schools.com/images/compatible_firefox.gif' class='peca' id='" + nome_casa.replace("casa", "peca_preta") + "'/>");
+                            $("#" + nome_casa).append("<img style='max-width:30px' src='https://imagensemoldes.com.br/wp-content/uploads/2018/02/Imagem-de-desenhos-Bob-Zoom-%C3%ACndio-1-180x200.png' class='peca' id='" + nome_casa.replace("casa", "peca_preta") + "'/>");
                         }
                         else if (pecas[x].ExercitoId == ExercitoPretoId) {
-                            $("#" + nome_casa).append("<img src='https://www.w3schools.com/images/compatible_safari.gif' class='peca' id='" + nome_casa.replace("casa", "peca_branca") + "'/>");
+                            $("#" + nome_casa).append("<img style='max-width:30px' src='https://i.pinimg.com/originals/5c/ca/a8/5ccaa8c32b9eb812bbaf7e93b4a6eb15.png' class='peca' id='" + nome_casa.replace("casa", "peca_branca") + "'/>");
                         }
 
                     }                    
