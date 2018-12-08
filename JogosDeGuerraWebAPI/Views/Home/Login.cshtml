@@ -213,16 +213,47 @@ input:focus { box-shadow: inset 0 -5px 45px rgba(100,100,100,0.4), 0 1px 1px rgb
         });
     </script>
     <script type="text/javascript">
-        function showError() {
+        function showError(jqXHR) {
 
             alert("Usuário ou senha inválida. Tente novamente!");
-            
+            var response = jqXHR.responseJSON;
+            if (response) {
+                if (response.Message) self.errors.push(response.Message);
+                if (response.ModelState) {
+                    var modelState = response.ModelState;
+                    for (var prop in modelState) {
+                        if (modelState.hasOwnProperty(prop)) {
+                            var msgArr = modelState[prop]; // expect array here
+                            if (msgArr.length) {
+                                for (var i = 0; i < msgArr.length; ++i) self.errors.push(msgArr[i]);
+                            }
+                        }
+                    }
+                }
+                if (response.error) self.errors.push(response.error);
+                if (response.error_description) self.errors.push(response.error_description);
             }
         }
-        function showError2() {
+        function showError2(jqXHR) {
 
-            alert("Não foi possível completar seu cadastro! Por favor, tente novamente.");
-            
+            alert("Não foi possível completar o seu cadastro, tente novamente!");
+            var response = jqXHR.responseJSON;
+            if (response) {
+                if (response.Message) self.errors.push(response.Message);
+                if (response.ModelState) {
+                    var modelState = response.ModelState;
+                    for (var prop in modelState) {
+                        if (modelState.hasOwnProperty(prop)) {
+                            var msgArr = modelState[prop]; // expect array here
+                            if (msgArr.length) {
+                                for (var i = 0; i < msgArr.length; ++i) self.errors.push(msgArr[i]);
+                            }
+                        }
+                    }
+                }
+                if (response.error) self.errors.push(response.error);
+                if (response.error_description) self.errors.push(response.error_description);
+            }
         }
 
 
@@ -234,8 +265,8 @@ input:focus { box-shadow: inset 0 -5px 45px rgba(100,100,100,0.4), 0 1px 1px rgb
                 (window.location.port ? ':' + window.location.port : '');
             var loginData = {
                 grant_type: 'password',
-                username: document.getElementById("regEmail").value,
-                password: document.getElementById("regPassword").value
+                username: document.getElementById("loginEmail").value,
+                password: document.getElementById("loginPassword").value
             };
             $.ajax({
                 type: 'POST',
@@ -266,9 +297,11 @@ input:focus { box-shadow: inset 0 -5px 45px rgba(100,100,100,0.4), 0 1px 1px rgb
                 url: baseUrl + '/api/Account/Register',
                 data: loginData
             }).done(function (data) {
-                alert("Usuário cadastrado com sucesso! Faça login para continuar");
+                
                 window.location.href = baseUrl + '/Home/Login';
                 // Cache the access token in session storage.
+                sessionStorage.setItem('accessToken', data.token_type + " " + data.access_token);
+                sessionStorage.setItem('emailUsuario', data.userName);
             }).fail(showError2);
         }
     </script>

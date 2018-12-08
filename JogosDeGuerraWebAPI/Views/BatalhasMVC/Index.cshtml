@@ -4,7 +4,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Batalhas</h2>
 
 <p>
     <button  type="button" onclick="CriarNovaBatalha(1)">Entrar em novo Jogo</button>    
@@ -12,53 +12,35 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.ExercitoBranco.Id)
+            Jogador 1
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ExercitoPreto.Id)
+            Jogador 2
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Tabuleiro.Id)
+            Vencedor
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Turno.Id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Vencedor.Id)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Estado)
-        </th>
+
         <th></th>
     </tr>
 
     @foreach (var item in Model)
     {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExercitoBranco.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ExercitoPreto.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Tabuleiro.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Turno.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Vencedor.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Estado)
-            </td>
-            <td>
-                @Html.ActionLink("Iniciar Batalha", "Tabuleiro", "BatalhasMVC", new { Id = item.Id }, null) |
-                @Html.ActionLink("Details", "Details", new { id = item.Id }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.Id })
-            </td>
-        </tr>
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExercitoBranco.Usuario.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ExercitoPreto.Usuario.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Vencedor.Usuario.Email)
+        </td>
+        <td>
+            @Html.ActionLink("Participar ou visualizar batalha", "Tabuleiro", "BatalhasMVC", new { Id = item.Id }, null) |
+            @Html.ActionLink("Ver informações", "Details", new { id = item.Id }) |
+        </td>
+    </tr>
     }
     @section MeusScripts{
         <script src="~/Scripts/Tabuleiro.js"></script>
