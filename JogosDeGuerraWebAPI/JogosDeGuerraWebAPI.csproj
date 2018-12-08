@@ -328,6 +328,7 @@
     <Content Include="Content\vendor\bootstrap\css\bootstrap-reboot.min.css.map" />
     <Content Include="Content\vendor\bootstrap\css\bootstrap.css.map" />
     <Content Include="Content\vendor\bootstrap\css\bootstrap.min.css.map" />
+    <None Include="Properties\PublishProfiles\exercitobrasileiro - Web Deploy.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\Cycle.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
